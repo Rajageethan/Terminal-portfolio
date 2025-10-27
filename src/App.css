@@ -1,0 +1,265 @@
+#root {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: #000000;
+  font-family: 'Courier New', monospace;
+}
+
+.terminal-container {
+  width: 100%;
+  height: 100vh;
+  background: #000000;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.terminal {
+  flex: 1;
+  background: #000000;
+  overflow-y: auto;
+  cursor: text;
+  width: 100%;
+  height: 100vh;
+}
+
+.terminal-content {
+  padding: 40px;
+  color: #00ff41;
+  font-size: 16px;
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+.command-line, .input-line {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.prompt {
+  color: #00ff41;
+  margin-right: 8px;
+  white-space: nowrap;
+}
+
+.command {
+  color: #ffffff;
+}
+
+.output-line {
+  margin-bottom: 4px;
+  color: #ffffff;
+  white-space: pre-wrap;
+  font-family: 'Courier New', monospace;
+}
+
+.terminal-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: inherit;
+  flex: 1;
+  caret-color: #00ff41;
+}
+
+.terminal-input::selection {
+  background: rgba(0, 255, 65, 0.3);
+}
+
+/* Scrollbar styling */
+.terminal::-webkit-scrollbar {
+  width: 12px;
+}
+
+.terminal::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+.terminal::-webkit-scrollbar-thumb {
+  background: #333333;
+  border-radius: 6px;
+}
+
+.terminal::-webkit-scrollbar-thumb:hover {
+  background: #555555;
+}
+
+/* Enhanced output styling */
+.terminal-output-item {
+  margin-bottom: 4px;
+}
+
+.ascii-art {
+  color: #00ff41;
+  margin: 8px 0;
+}
+
+.output-table {
+  font-family: 'Courier New', monospace;
+  margin: 8px 0;
+  border: 1px solid #333;
+}
+
+.table-row {
+  display: flex;
+  border-bottom: 1px solid #222;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.table-cell {
+  padding: 4px 12px;
+  border-right: 1px solid #333;
+  flex: 1;
+  min-width: 100px;
+}
+
+.table-cell:last-child {
+  border-right: none;
+}
+
+.table-cell.header {
+  font-weight: bold;
+  background: rgba(0, 255, 65, 0.1);
+  color: #00ff41;
+}
+
+.progress-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+}
+
+.progress-label {
+  min-width: 120px;
+  color: #ffffff;
+}
+
+.progress-bar {
+  width: 200px;
+  height: 16px;
+  background: #333;
+  border: 1px solid #00ff41;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00ff41, #00cc33);
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.progress-text {
+  min-width: 40px;
+  color: #00ff41;
+  font-weight: bold;
+}
+
+.output-line.error {
+  color: #ff4444;
+  background: rgba(255, 68, 68, 0.1);
+  padding: 4px 8px;
+  border-left: 3px solid #ff4444;
+  margin: 4px 0;
+}
+
+.output-line.success {
+  color: #44ff44;
+  background: rgba(68, 255, 68, 0.1);
+  padding: 4px 8px;
+  border-left: 3px solid #44ff44;
+  margin: 4px 0;
+}
+
+.output-line.warning {
+  color: #ffaa44;
+  background: rgba(255, 170, 68, 0.1);
+  padding: 4px 8px;
+  border-left: 3px solid #ffaa44;
+  margin: 4px 0;
+}
+
+.terminal-link {
+  color: #0080ff !important;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.terminal-link:hover {
+  color: #44aaff !important;
+  text-shadow: 0 0 5px rgba(68, 170, 255, 0.5);
+}
+
+.list-item {
+  display: inline-block;
+  margin-right: 16px;
+  color: #ffffff;
+}
+
+.list-item:hover {
+  color: #00ff41;
+}
+
+/* Game loading states */
+.output-line:has(.game-loading) {
+  text-align: center;
+  color: #00ff41;
+  font-style: italic;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .terminal-content {
+    padding: 20px;
+    font-size: 14px;
+  }
+  
+  .progress-bar {
+    width: 150px;
+  }
+  
+  .progress-label {
+    min-width: 80px;
+    font-size: 12px;
+  }
+  
+  .table-cell {
+    padding: 2px 6px;
+    min-width: 60px;
+  }
+  
+  .output-table {
+    font-size: 12px;
+  }
+}
