@@ -9,7 +9,7 @@ export default class CommandProcessor {
 
   async processCommand(command) {
     const [cmd, ...args] = command.toLowerCase().split(' ');
-    
+
     switch (cmd) {
       case 'welcome':
         return this.welcome();
@@ -77,8 +77,6 @@ export default class CommandProcessor {
   }
 
   welcome() {
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 500;
-    
     const asciiFull = `██████╗  █████╗      ██╗ █████╗  ██████╗ ███████╗███████╗████████╗██╗  ██╗ █████╗ ███╗   ██╗
 ██╔══██╗██╔══██╗     ██║██╔══██╗██╔════╝ ██╔════╝██╔════╝╚══██╔══╝██║  ██║██╔══██╗████╗  ██║
 ██████╔╝███████║     ██║███████║██║  ███╗█████╗  █████╗     ██║   ███████║███████║██╔██╗ ██║
@@ -86,15 +84,11 @@ export default class CommandProcessor {
 ██║  ██║██║  ██║╚█████╔╝██║  ██║╚██████╔╝███████╗███████╗   ██║   ██║  ██║██║  ██║██║ ╚████║
 ╚═╝  ╚═╝╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝`;
 
-    const asciiCompact = `╔══════════════════════╗
-║  RAJAGEETHAN A       ║
-║  Software Developer  ║
-╚══════════════════════╝`;
-
     return [
-      { type: 'ascii', content: isMobile ? asciiCompact : asciiFull },
+      { type: 'ascii-desktop', content: asciiFull },
+      { type: 'mobile-name', content: 'RAJAGEETHAN A' },
       { type: 'text', content: '' },
-      { type: 'text', content: 'SOFTWARE DEVELOPER | CS STUDENT' },
+      { type: 'header', content: 'SOFTWARE DEVELOPER | COMPUTER SCIENCE STUDENT' },
       { type: 'text', content: 'Builder, Dreamer, Problem Solver' },
       { type: 'text', content: 'Thanjavur, Tamil Nadu, India' },
       { type: 'text', content: '' },
@@ -206,7 +200,7 @@ export default class CommandProcessor {
       const categories = ['frontend', 'backend', 'database', 'tools'];
       items = categories.map(cat => ({
         name: `${cat}.txt`,
-        type: 'file', 
+        type: 'file',
         color: 'text-yellow-400'
       }));
     }
@@ -225,7 +219,7 @@ export default class CommandProcessor {
     }
 
     const filename = args[0];
-    
+
     if (filename === 'about.txt') {
       return this.about();
     }
@@ -557,9 +551,9 @@ export default class CommandProcessor {
       { type: 'text', content: '' },
       { type: 'text', content: 'My complete resume is available for download:' },
       { type: 'text', content: '' },
-      { 
-        type: 'link', 
-        content: 'Download CV (PDF)', 
+      {
+        type: 'link',
+        content: 'Download CV (PDF)',
         url: './resume.pdf',
         ariaLabel: 'Download Rajageethan A resume PDF'
       },
@@ -664,7 +658,7 @@ export default class CommandProcessor {
     \\          /
      \\________/
     `;
-    
+
     return [
       { type: 'ascii', content: coffeeArt },
       { type: 'text', content: 'BREWING VIRTUAL COFFEE...' },
@@ -692,9 +686,9 @@ export default class CommandProcessor {
       "A SQL query goes into a bar, walks up to two tables and asks: 'Can I join you?'",
       "Why do Java developers wear glasses? Because they can't C#!",
     ];
-    
+
     const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
-    
+
     return [
       { type: 'text', content: 'PROGRAMMING HUMOR' },
       { type: 'text', content: '═'.repeat(17) },
@@ -718,9 +712,9 @@ export default class CommandProcessor {
       "\"The only way to learn a new programming language is by writing programs in it.\" - Dennis Ritchie",
       "\"It's not a bug – it's an undocumented feature.\" - Anonymous",
     ];
-    
+
     const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-    
+
     return [
       { type: 'text', content: 'DEVELOPER WISDOM' },
       { type: 'text', content: '═'.repeat(16) },
@@ -800,7 +794,7 @@ export default class CommandProcessor {
   weather() {
     const conditions = ['Sunny', 'Cloudy', 'Rainy', 'Coding Weather', 'Perfect for Development'];
     const randomCondition = conditions[Math.floor(Math.random() * conditions.length)];
-    
+
     return [
       { type: 'text', content: 'WEATHER REPORT' },
       { type: 'text', content: '═'.repeat(14) },
@@ -819,7 +813,7 @@ export default class CommandProcessor {
     const now = new Date();
     const timeString = now.toLocaleTimeString();
     const dateString = now.toLocaleDateString();
-    
+
     return [
       { type: 'text', content: 'CURRENT TIME' },
       { type: 'text', content: '═'.repeat(12) },
@@ -844,9 +838,9 @@ export default class CommandProcessor {
       "Your mobile app will trend on the app store.",
       "The deployment will go smoothly this time.",
     ];
-    
+
     const randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
-    
+
     return [
       { type: 'text', content: 'DEVELOPER FORTUNE' },
       { type: 'text', content: '═'.repeat(17) },

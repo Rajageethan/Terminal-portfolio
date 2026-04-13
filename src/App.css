@@ -73,8 +73,15 @@
 }
 
 @keyframes bootReveal {
-  from { opacity: 0; transform: translateY(3px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ===== CRT OVERLAY ===== */
@@ -83,36 +90,52 @@
   inset: 0;
   pointer-events: none;
   z-index: 9999;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.12) 0px,
-    rgba(0, 0, 0, 0.12) 1px,
-    transparent 1px,
-    transparent 2px
-  );
+  background: repeating-linear-gradient(0deg,
+      rgba(0, 0, 0, 0.12) 0px,
+      rgba(0, 0, 0, 0.12) 1px,
+      transparent 1px,
+      transparent 2px);
 }
 
 .crt-overlay::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.35));
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.35));
 }
 
 .crt-overlay::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0);
+  background: rgba(0, 0, 0, 0);
   animation: crtFlicker 4s linear infinite;
 }
 
 @keyframes crtFlicker {
-  0%, 100% { opacity: 0; }
-  5% { opacity: 0.03; background: rgba(255,255,255,0.03); }
-  10% { opacity: 0; }
-  50.5% { opacity: 0.02; background: rgba(255,255,255,0.02); }
-  51% { opacity: 0; }
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  5% {
+    opacity: 0.03;
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  10% {
+    opacity: 0;
+  }
+
+  50.5% {
+    opacity: 0.02;
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  51% {
+    opacity: 0;
+  }
 }
 
 /* ===== TERMINAL CHROME (Title Bar) ===== */
@@ -125,7 +148,7 @@
   gap: 8px;
   flex-shrink: 0;
   user-select: none;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .chrome-buttons {
@@ -146,9 +169,17 @@
   opacity: 0.8;
 }
 
-.chrome-btn.close { background: #ff5f57; }
-.chrome-btn.minimize { background: #febc2e; }
-.chrome-btn.maximize { background: #28c840; }
+.chrome-btn.close {
+  background: #ff5f57;
+}
+
+.chrome-btn.minimize {
+  background: #febc2e;
+}
+
+.chrome-btn.maximize {
+  background: #28c840;
+}
 
 .chrome-title {
   flex: 1;
@@ -190,7 +221,8 @@
 }
 
 /* ===== INPUT LINE ===== */
-.command-line, .input-line {
+.command-line,
+.input-line {
   display: flex;
   align-items: center;
   margin-bottom: 6px;
@@ -247,8 +279,15 @@
 }
 
 @keyframes cursorBlink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
 }
 
 /* ===== OUTPUT ===== */
@@ -269,8 +308,15 @@
 }
 
 @keyframes lineReveal {
-  from { opacity: 0; transform: translateY(2px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Copy indicator */
@@ -280,7 +326,7 @@
 }
 
 .terminal-output-item.copyable:hover {
-  background: rgba(255,255,255,0.03);
+  background: rgba(255, 255, 255, 0.03);
   border-radius: 2px;
 }
 
@@ -317,6 +363,38 @@
   line-height: 1.2;
 }
 
+/* Desktop ASCII name — visible by default */
+.ascii-desktop-only {
+  display: block;
+}
+
+/* Mobile name banner — hidden on desktop */
+.mobile-name-banner {
+  display: none;
+  margin: 8px 0 4px;
+  padding: 0;
+}
+
+.mobile-name-text {
+  color: var(--fg);
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-shadow: 0 0 10px var(--fg), 0 0 30px rgba(0, 255, 65, 0.15);
+  display: block;
+  line-height: 1;
+}
+
+/* Header subtitle */
+.output-header {
+  color: var(--text-dim, #aaa);
+  font-weight: 500;
+  letter-spacing: 1px;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
 /* ===== TABLES ===== */
 .output-table {
   font-family: 'Fira Code', 'Courier New', monospace;
@@ -334,7 +412,7 @@
 
 .table-row {
   display: flex;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   min-width: max-content;
 }
 
@@ -397,13 +475,18 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
   animation: shimmer 2s infinite;
 }
 
 @keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 .progress-text {
@@ -478,7 +561,7 @@
 }
 
 .terminal::-webkit-scrollbar-thumb:hover {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 /* ===== LOADING SPINNER ===== */
@@ -496,14 +579,37 @@
 }
 
 @keyframes spinnerRotate {
-  0% { content: '⠋'; }
-  12.5% { content: '⠙'; }
-  25% { content: '⠹'; }
-  37.5% { content: '⠸'; }
-  50% { content: '⠼'; }
-  62.5% { content: '⠴'; }
-  75% { content: '⠦'; }
-  87.5% { content: '⠧'; }
+  0% {
+    content: '⠋';
+  }
+
+  12.5% {
+    content: '⠙';
+  }
+
+  25% {
+    content: '⠹';
+  }
+
+  37.5% {
+    content: '⠸';
+  }
+
+  50% {
+    content: '⠼';
+  }
+
+  62.5% {
+    content: '⠴';
+  }
+
+  75% {
+    content: '⠦';
+  }
+
+  87.5% {
+    content: '⠧';
+  }
 }
 
 /* ===== TAB AUTOCOMPLETE HINTS ===== */
@@ -620,8 +726,15 @@
 }
 
 @keyframes hintSlideIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ===== GAME CANVAS ===== */
@@ -691,6 +804,18 @@
   .ascii-art {
     font-size: 7px !important;
     line-height: 1.1 !important;
+  }
+
+  .ascii-desktop-only {
+    display: none !important;
+  }
+
+  .mobile-name-banner {
+    display: block !important;
+  }
+
+  .output-header {
+    font-size: 11px;
   }
 
   .mobile-suggestions {
@@ -787,6 +912,16 @@
     letter-spacing: -0.5px;
   }
 
+  .mobile-name-text {
+    font-size: 18px;
+    letter-spacing: 2px;
+  }
+
+  .output-header {
+    font-size: 10px;
+    letter-spacing: 0.5px;
+  }
+
   .output-line.error,
   .output-line.success,
   .output-line.warning {
@@ -818,6 +953,11 @@
     line-height: 1 !important;
   }
 
+  .mobile-name-text {
+    font-size: 16px;
+    letter-spacing: 1.5px;
+  }
+
   .table-cell {
     min-width: 50px;
     font-size: 9px;
@@ -842,6 +982,18 @@
   .ascii-art {
     font-size: 5px !important;
     line-height: 1 !important;
+  }
+
+  .ascii-desktop-only {
+    display: none !important;
+  }
+
+  .mobile-name-banner {
+    display: block !important;
+  }
+
+  .mobile-name-text {
+    font-size: 16px;
   }
 
   .boot-screen {

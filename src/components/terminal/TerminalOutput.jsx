@@ -63,6 +63,28 @@ const outputRenderers = {
     </pre>
   ),
 
+  'ascii-desktop': (item) => (
+    <pre
+      className="output-line ascii-art ascii-desktop-only"
+      role="img"
+      aria-label="Rajageethan A"
+    >
+      {item.content}
+    </pre>
+  ),
+
+  'mobile-name': (item) => (
+    <div className="mobile-name-banner" role="heading" aria-level="1">
+      <span className="mobile-name-text">{item.content}</span>
+    </div>
+  ),
+
+  header: (item) => (
+    <div className="output-line output-header">
+      {item.content}
+    </div>
+  ),
+
   link: (item) => (
     <a
       href={item.url}
