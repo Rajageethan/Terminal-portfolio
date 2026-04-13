@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rajageethan.github.io/Terminal-portfolio/sitemap.xml

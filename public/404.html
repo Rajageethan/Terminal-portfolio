@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 | Rajageethan A - Terminal Portfolio</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #000;
+      color: #00ff41;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container { max-width: 600px; }
+    h1 { font-size: 48px; margin-bottom: 16px; }
+    .error-code { color: #ff4444; font-size: 14px; margin-bottom: 24px; }
+    p { color: #ffffff; margin-bottom: 12px; font-size: 15px; }
+    a { color: #0080ff; text-decoration: underline; }
+    a:hover { color: #44aaff; }
+    .prompt { margin-top: 24px; }
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 18px;
+      background: #00ff41;
+      animation: blink 1s step-end infinite;
+      vertical-align: text-bottom;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>404</h1>
+    <div class="error-code">ERROR: Page not found</div>
+    <p>The path you requested does not exist in this filesystem.</p>
+    <p>Perhaps you meant one of these:</p>
+    <p>&nbsp;&nbsp;• <a href="/Terminal-portfolio/">cd ~/portfolio</a> — Return to the terminal</p>
+    <p>&nbsp;&nbsp;• <a href="https://github.com/rajageethan">github.com/rajageethan</a> — View source code</p>
+    <div class="prompt">
+      <span style="color:#00ff41">visitor@portfolio:~$</span>
+      <span class="cursor"></span>
+    </div>
+  </div>
+  <!-- GitHub Pages SPA redirect -->
+  <script>
+    var pathSegmentsToKeep = 1;
+    var l = window.location;
+    if (l.pathname !== '/Terminal-portfolio/' && l.pathname !== '/Terminal-portfolio/index.html') {
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        '/Terminal-portfolio/?/' +
+        l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+        l.hash
+      );
+    }
+  </script>
+</body>
+</html>

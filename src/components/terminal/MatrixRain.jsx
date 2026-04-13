@@ -2,25 +2,51 @@ import React, { useEffect, useRef } from 'react';
 
 export default function MatrixRain() {
   const canvasRef = useRef(null);
+  const containerRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
+
     const ctx = canvas.getContext('2d');
+
+    // Responsive sizing
+    const updateSize = () => {
+      const containerWidth = container.offsetWidth - 4; // account for border
+      canvas.width = Math.min(600, Math.max(200, containerWidth));
+      canvas.height = Math.round(canvas.width / 3);
+    };
+    updateSize();
+
+    const observer = new ResizeObserver(updateSize);
+    observer.observe(container);
     
     // Matrix characters
     const matrixChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}';
     const chars = matrixChars.split('');
     
     const fontSize = 10;
-    const columns = canvas.width / fontSize;
-    const drops = [];
+    let drops = [];
     
     // Initialize drops
-    for (let x = 0; x < columns; x++) {
-      drops[x] = 1;
-    }
+    const initDrops = () => {
+      const columns = Math.floor(canvas.width / fontSize);
+      drops = [];
+      for (let x = 0; x < columns; x++) {
+        drops[x] = 1;
+      }
+    };
+    initDrops();
     
     function draw() {
+      const columns = Math.floor(canvas.width / fontSize);
+
+      // Reinit drops if column count changed
+      if (drops.length !== columns) {
+        initDrops();
+      }
+
       // Semi-transparent background for trailing effect
       ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -42,19 +68,22 @@ export default function MatrixRain() {
     
     const interval = setInterval(draw, 35);
     
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      observer.disconnect();
+    };
   }, []);
 
   return (
-    <div style={{ margin: '10px 0' }}>
+    <div ref={containerRef} style={{ margin: '10px 0', width: '100%', maxWidth: '600px' }}>
       <canvas
         ref={canvasRef}
-        width={600}
-        height={200}
         style={{
           border: '1px solid #00ff41',
           backgroundColor: '#000000',
-          display: 'block'
+          display: 'block',
+          width: '100%',
+          height: 'auto'
         }}
       />
       <div style={{ color: '#00ff41', marginTop: '10px', fontSize: '12px', textAlign: 'center' }}>

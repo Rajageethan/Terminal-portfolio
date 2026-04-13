@@ -1,65 +1,137 @@
+/* ===== FONT & GLOBAL RESET ===== */
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-:root {
-  font-family: 'Courier New', monospace;
+/* ===== THEME VARIABLES ===== */
+:root, [data-theme="matrix"] {
+  --bg: #000000;
+  --bg-secondary: #0a0a0a;
+  --fg: #00ff41;
+  --text: #ffffff;
+  --text-dim: #aaaaaa;
+  --accent: #00ff41;
+  --dim: #333333;
+  --error: #ff4444;
+  --success: #44ff44;
+  --warning: #ffaa44;
+  --link: #0080ff;
+  --link-hover: #44aaff;
+  --scrollbar: #333333;
+  --selection: rgba(0, 255, 65, 0.3);
+
+  font-family: 'Fira Code', 'Courier New', monospace;
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #0c0c0c;
-
+  color: var(--text);
+  background-color: var(--bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+[data-theme="dracula"] {
+  --bg: #282a36;
+  --bg-secondary: #1e1f29;
+  --fg: #bd93f9;
+  --text: #f8f8f2;
+  --text-dim: #6272a4;
+  --accent: #bd93f9;
+  --dim: #44475a;
+  --error: #ff5555;
+  --success: #50fa7b;
+  --warning: #f1fa8c;
+  --link: #8be9fd;
+  --link-hover: #a4f0ff;
+  --scrollbar: #44475a;
+  --selection: rgba(189, 147, 249, 0.3);
+}
+
+[data-theme="monokai"] {
+  --bg: #272822;
+  --bg-secondary: #1e1f1a;
+  --fg: #a6e22e;
+  --text: #f8f8f2;
+  --text-dim: #75715e;
+  --accent: #a6e22e;
+  --dim: #49483e;
+  --error: #f92672;
+  --success: #a6e22e;
+  --warning: #e6db74;
+  --link: #66d9ef;
+  --link-hover: #90e5f5;
+  --scrollbar: #49483e;
+  --selection: rgba(166, 226, 46, 0.3);
+}
+
+[data-theme="solarized"] {
+  --bg: #002b36;
+  --bg-secondary: #001f28;
+  --fg: #859900;
+  --text: #839496;
+  --text-dim: #586e75;
+  --accent: #859900;
+  --dim: #073642;
+  --error: #dc322f;
+  --success: #859900;
+  --warning: #b58900;
+  --link: #268bd2;
+  --link-hover: #4da3df;
+  --scrollbar: #073642;
+  --selection: rgba(133, 153, 0, 0.3);
+}
+
+[data-theme="amber"] {
+  --bg: #0a0800;
+  --bg-secondary: #0d0b00;
+  --fg: #ffb000;
+  --text: #ffcc44;
+  --text-dim: #996600;
+  --accent: #ffb000;
+  --dim: #332800;
+  --error: #ff4444;
+  --success: #ffcc00;
+  --warning: #ff8800;
+  --link: #ffdd44;
+  --link-hover: #ffee88;
+  --scrollbar: #332800;
+  --selection: rgba(255, 176, 0, 0.3);
+}
+
+[data-theme="cyberpunk"] {
+  --bg: #0d0221;
+  --bg-secondary: #0a0118;
+  --fg: #0abdc6;
+  --text: #e0e0e0;
+  --text-dim: #6c6c8a;
+  --accent: #0abdc6;
+  --dim: #1a1040;
+  --error: #ea00d9;
+  --success: #71eeeb;
+  --warning: #ff6c11;
+  --link: #ea00d9;
+  --link-hover: #ff44ee;
+  --scrollbar: #1a1040;
+  --selection: rgba(10, 189, 198, 0.3);
+}
+
 body {
   margin: 0;
-  min-width: 320px;
+  min-width: 280px;
   min-height: 100vh;
-  background: #000000;
+  min-height: 100dvh;
+  background: var(--bg);
   overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+::selection {
+  background: var(--selection);
 }

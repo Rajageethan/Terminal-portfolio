@@ -1,6 +1,6 @@
-import React, { memo, lazy, Suspense } from 'react';
+import React, { memo, lazy, Suspense, useCallback } from 'react';
 
-// Lazy load the DinoGame for better performance
+// Lazy load games
 const DinoGame = lazy(() => import('./DinoGame'));
 const MatrixRain = lazy(() => import('./MatrixRain'));
 
@@ -23,12 +23,20 @@ class GameErrorBoundary extends React.Component {
     if (this.state.hasError) {
       return <div className="output-line error">Game failed to load</div>;
     }
-
     return this.props.children;
   }
 }
 
-// Enhanced output renderers
+// Get copyable text from an item
+const getCopyText = (item) => {
+  if (!item) return '';
+  if (typeof item.content === 'string') return item.content;
+  if (Array.isArray(item.content)) return item.content.join('\n');
+  if (item.items) return item.items.map(i => i.name || i).join(', ');
+  return '';
+};
+
+// Output renderers
 const outputRenderers = {
   command: (item) => (
     <div className="prompt" role="presentation">
@@ -38,7 +46,7 @@ const outputRenderers = {
 
   text: (item) => (
     <div className="output-line" role="log">
-      {Array.isArray(item.content) 
+      {Array.isArray(item.content)
         ? item.content.map((line, i) => <div key={i}>{line}</div>)
         : item.content
       }
@@ -46,9 +54,8 @@ const outputRenderers = {
   ),
 
   ascii: (item) => (
-    <pre 
-      className="output-line ascii-art" 
-      style={{ fontSize: '10px', lineHeight: '1.2' }}
+    <pre
+      className="output-line ascii-art"
       role="img"
       aria-label={item.alt || "ASCII Art"}
     >
@@ -57,12 +64,11 @@ const outputRenderers = {
   ),
 
   link: (item) => (
-    <a 
+    <a
       href={item.url}
       target="_blank"
       rel="noopener noreferrer"
       className="output-line terminal-link"
-      style={{ color: '#0080ff', textDecoration: 'underline' }}
       aria-label={item.ariaLabel || `Link to ${item.content}`}
     >
       {item.content}
@@ -72,10 +78,9 @@ const outputRenderers = {
   list: (item) => (
     <div className="output-line" role="list">
       {item.items?.map((listItem, i) => (
-        <span 
-          key={listItem.id || i} 
+        <span
+          key={listItem.id || i}
           className="list-item"
-          style={{ marginRight: '16px' }}
           role="listitem"
         >
           {listItem.name || listItem}
@@ -111,8 +116,8 @@ const outputRenderers = {
     <div className="output-line progress-container">
       <span className="progress-label">{item.label}: </span>
       <div className="progress-bar">
-        <div 
-          className="progress-fill" 
+        <div
+          className="progress-fill"
           style={{ width: `${item.value || 0}%` }}
           role="progressbar"
           aria-valuenow={item.value}
@@ -145,20 +150,19 @@ const outputRenderers = {
   game: (item) => {
     const gameComponents = {
       'dino-runner': (
-        <Suspense fallback={<div className="output-line">Loading game...</div>}>
+        <Suspense fallback={<div className="loading-spinner"><span className="spinner-dots"></span><span>Loading game...</span></div>}>
           <DinoGame />
         </Suspense>
       ),
       'matrix-rain': (
-        <Suspense fallback={<div className="output-line">Entering the Matrix...</div>}>
+        <Suspense fallback={<div className="loading-spinner"><span className="spinner-dots"></span><span>Entering the Matrix...</span></div>}>
           <MatrixRain />
         </Suspense>
       ),
-      // Add more games here
     };
 
     const GameComponent = gameComponents[item.content];
-    
+
     if (!GameComponent) {
       return <div className="output-line error">Game '{item.content}' not found</div>;
     }
@@ -171,8 +175,7 @@ const outputRenderers = {
   }
 };
 
-const TerminalOutput = memo(({ item, index }) => {
-  // Validate item structure
+const TerminalOutput = memo(({ item, onCopy }) => {
   if (!item || typeof item !== 'object') {
     console.warn('Invalid item passed to TerminalOutput:', item);
     return <div className="output-line error">Invalid output item</div>;
@@ -186,11 +189,21 @@ const TerminalOutput = memo(({ item, index }) => {
     return <div className="output-line">{item.content || 'Unknown output'}</div>;
   }
 
+  // Determine if this item is copyable
+  const copyable = type !== 'command' && type !== 'game' && getCopyText(item);
+
+  const handleClick = useCallback(() => {
+    if (copyable && onCopy) {
+      onCopy(getCopyText(item));
+    }
+  }, [item, copyable, onCopy]);
+
   return (
-    <div 
-      className={`terminal-output-item ${type}`}
-      data-index={index}
+    <div
+      className={`terminal-output-item ${type}${copyable ? ' copyable' : ''}`}
       data-type={type}
+      onClick={copyable ? handleClick : undefined}
+      title={copyable ? 'Click to copy' : undefined}
     >
       {renderer(item)}
     </div>

@@ -1,0 +1,20 @@
+{
+  "name": "Rajageethan A | Terminal Portfolio",
+  "short_name": "RA Portfolio",
+  "description": "Interactive terminal portfolio showcasing projects, skills, and experience.",
+  "start_url": "/Terminal-portfolio/",
+  "scope": "/Terminal-portfolio/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "categories": ["portfolio", "developer", "personal"],
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

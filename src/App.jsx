@@ -1,12 +1,160 @@
- import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, Component } from 'react';
 import Terminal from './components/terminal/Terminal';
-import './App.css'
+import './App.css';
 
+// ===== Error Boundary =====
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('Portfolio error:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{
+          background: '#000', color: '#ff4444', padding: '40px',
+          fontFamily: "'Fira Code', 'Courier New', monospace", minHeight: '100vh'
+        }}>
+          <h1 style={{ color: '#00ff41', marginBottom: '16px' }}>System Error</h1>
+          <p style={{ marginBottom: '8px' }}>ERROR: An unexpected error occurred</p>
+          <p style={{ color: '#888', marginBottom: '16px' }}>{this.state.error?.message}</p>
+          <button
+            onClick={() => window.location.reload()}
+            style={{
+              background: '#333', color: '#00ff41', border: '1px solid #00ff41',
+              padding: '8px 20px', cursor: 'pointer', fontFamily: 'inherit',
+              borderRadius: '4px'
+            }}
+          >
+            reboot system
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+// ===== Boot Sequence Lines =====
+const BOOT_LINES = [
+  { text: '[BIOS] Rajageethan Portfolio System v1.0', type: 'highlight', delay: 100 },
+  { text: '[POST] Running diagnostics...', type: 'info', delay: 200 },
+  { text: 'progress', type: 'progress', delay: 800 },
+  { text: 'Memory Check: 16384 MB .................. OK', type: 'ok', delay: 150 },
+  { text: 'CPU: Developer Brain @ 3.0 GHz .......... OK', type: 'ok', delay: 150 },
+  { text: 'GPU: Creativity Engine v2.0 ............. OK', type: 'ok', delay: 150 },
+  { text: '', type: 'info', delay: 50 },
+  { text: 'Loading modules:', type: 'info', delay: 100 },
+  { text: '  [✓] react@19.1.1', type: 'ok', delay: 100 },
+  { text: '  [✓] vite@7.1', type: 'ok', delay: 80 },
+  { text: '  [✓] terminal-emulator', type: 'ok', delay: 80 },
+  { text: '  [✓] command-processor', type: 'ok', delay: 80 },
+  { text: '  [✓] portfolio-engine', type: 'ok', delay: 80 },
+  { text: '', type: 'info', delay: 50 },
+  { text: 'Starting services:', type: 'info', delay: 100 },
+  { text: '  [✓] Portfolio Service', type: 'ok', delay: 100 },
+  { text: '  [✓] Project Database', type: 'ok', delay: 80 },
+  { text: '  [✓] Skills Registry', type: 'ok', delay: 80 },
+  { text: '  [✓] Game Engine', type: 'ok', delay: 80 },
+  { text: '', type: 'info', delay: 50 },
+  { text: 'All systems nominal.', type: 'highlight', delay: 200 },
+  { text: 'Starting terminal...', type: 'highlight', delay: 400 },
+];
+
+function BootSequence({ onComplete }) {
+  const [visibleLines, setVisibleLines] = useState([]);
+  const [progress, setProgress] = useState(0);
+  const [fadeOut, setFadeOut] = useState(false);
+
+  useEffect(() => {
+    let lineIndex = 0;
+    let totalDelay = 0;
+    const timers = [];
+
+    BOOT_LINES.forEach((line, i) => {
+      totalDelay += line.delay;
+      const timer = setTimeout(() => {
+        if (line.type === 'progress') {
+          // Animate progress bar
+          let p = 0;
+          const progressTimer = setInterval(() => {
+            p += 10;
+            setProgress(p);
+            if (p >= 100) clearInterval(progressTimer);
+          }, 50);
+          timers.push(progressTimer);
+        }
+        setVisibleLines(prev => [...prev, line]);
+        lineIndex = i;
+      }, totalDelay);
+      timers.push(timer);
+    });
+
+    // After all lines, fade out and complete
+    const finalTimer = setTimeout(() => {
+      setFadeOut(true);
+      setTimeout(() => {
+        onComplete();
+      }, 600);
+    }, totalDelay + 500);
+    timers.push(finalTimer);
+
+    return () => timers.forEach(t => clearTimeout(t));
+  }, [onComplete]);
+
+  return (
+    <div className={`boot-screen ${fadeOut ? 'fade-out' : ''}`}>
+      <div className="boot-content">
+        {visibleLines.map((line, i) => (
+          line.type === 'progress' ? (
+            <div key={i} className="boot-progress">
+              <div className="boot-progress-fill" style={{ width: `${progress}%` }} />
+            </div>
+          ) : (
+            <div key={i} className={`boot-line ${line.type}`}>{line.text}</div>
+          )
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ===== Main App =====
 function App() {
   const [user, setUser] = useState(null);
   const [projects, setProjects] = useState([]);
   const [skills, setSkills] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [booting, setBooting] = useState(false);
+  const [theme, setTheme] = useState(() => localStorage.getItem('terminal-theme') || 'matrix');
+  const [crtEnabled, setCrtEnabled] = useState(() => localStorage.getItem('crt-enabled') === 'true');
+
+  // Apply theme
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('terminal-theme', theme);
+  }, [theme]);
+
+  // Check if boot sequence should play (once per session)
+  useEffect(() => {
+    if (!sessionStorage.getItem('booted')) {
+      setBooting(true);
+    }
+  }, []);
+
+  const handleBootComplete = useCallback(() => {
+    sessionStorage.setItem('booted', 'true');
+    setBooting(false);
+  }, []);
 
   useEffect(() => {
     loadData();
@@ -113,14 +261,31 @@ function App() {
       <div className="terminal-container">
         <div className="terminal">
           <div className="terminal-content">
-            <div className="output-line">Loading terminal...</div>
+            <div className="loading-spinner">
+              <span className="spinner-dots"></span>
+              <span>Loading system...</span>
+            </div>
           </div>
         </div>
       </div>
     );
   }
 
-  return <Terminal user={user} projects={projects} skills={skills} />;
+  return (
+    <ErrorBoundary>
+      {booting && <BootSequence onComplete={handleBootComplete} />}
+      {crtEnabled && <div className="crt-overlay" />}
+      <Terminal
+        user={user}
+        projects={projects}
+        skills={skills}
+        theme={theme}
+        setTheme={setTheme}
+        crtEnabled={crtEnabled}
+        setCrtEnabled={setCrtEnabled}
+      />
+    </ErrorBoundary>
+  );
 }
 
-export default App
+export default App;

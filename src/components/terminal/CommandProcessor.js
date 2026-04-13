@@ -62,23 +62,39 @@ export default class CommandProcessor {
       case 'hack':
       case 'sudo':
         return this.funnyResponses(cmd);
+      // New commands
+      case 'neofetch':
+        return this.neofetch();
+      case 'social':
+        return this.social();
+      case 'project':
+        return this.projectDetail(args);
+      case 'man':
+        return this.manPage(args);
       default:
         return this.commandNotFound(command);
     }
   }
 
   welcome() {
-    const ascii = `██████╗  █████╗      ██╗ █████╗  ██████╗ ███████╗███████╗████████╗██╗  ██╗ █████╗ ███╗   ██╗
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 500;
+    
+    const asciiFull = `██████╗  █████╗      ██╗ █████╗  ██████╗ ███████╗███████╗████████╗██╗  ██╗ █████╗ ███╗   ██╗
 ██╔══██╗██╔══██╗     ██║██╔══██╗██╔════╝ ██╔════╝██╔════╝╚══██╔══╝██║  ██║██╔══██╗████╗  ██║
 ██████╔╝███████║     ██║███████║██║  ███╗█████╗  █████╗     ██║   ███████║███████║██╔██╗ ██║
 ██╔══██╗██╔══██║██   ██║██╔══██║██║   ██║██╔══╝  ██╔══╝     ██║   ██╔══██║██╔══██║██║╚██╗██║
 ██║  ██║██║  ██║╚█████╔╝██║  ██║╚██████╔╝███████╗███████╗   ██║   ██║  ██║██║  ██║██║ ╚████║
 ╚═╝  ╚═╝╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝`;
 
+    const asciiCompact = `╔══════════════════════╗
+║  RAJAGEETHAN A       ║
+║  Software Developer  ║
+╚══════════════════════╝`;
+
     return [
-      { type: 'ascii', content: ascii },
+      { type: 'ascii', content: isMobile ? asciiCompact : asciiFull },
       { type: 'text', content: '' },
-      { type: 'text', content: 'SOFTWARE DEVELOPER | COMPUTER SCIENCE STUDENT' },
+      { type: 'text', content: 'SOFTWARE DEVELOPER | CS STUDENT' },
       { type: 'text', content: 'Builder, Dreamer, Problem Solver' },
       { type: 'text', content: 'Thanjavur, Tamil Nadu, India' },
       { type: 'text', content: '' },
@@ -101,8 +117,10 @@ export default class CommandProcessor {
       { type: 'text', content: '  experience         - Work experience' },
       { type: 'text', content: '  skills             - Technical competencies' },
       { type: 'text', content: '  projects           - Portfolio showcase' },
+      { type: 'text', content: '  project <name>     - Deep dive into project' },
       { type: 'text', content: '  achievements       - Awards & certifications' },
       { type: 'text', content: '  contact            - Get in touch' },
+      { type: 'text', content: '  social             - All social links' },
       { type: 'text', content: '  resume             - Download CV' },
       { type: 'text', content: '' },
       { type: 'text', content: 'Fun & Interactive:' },
@@ -110,23 +128,28 @@ export default class CommandProcessor {
       { type: 'text', content: '  fun                - Show all fun commands' },
       { type: 'text', content: '  dino               - Play Chrome dino game' },
       { type: 'text', content: '  matrix             - Enter the Matrix' },
-      { type: 'text', content: '  joke               - Get a programming joke' },
+      { type: 'text', content: '  joke               - Programming joke' },
       { type: 'text', content: '  quote              - Motivational quote' },
       { type: 'text', content: '  coffee             - Brew some coffee' },
-      { type: 'text', content: '  weather            - Check weather' },
-      { type: 'text', content: '  time               - Current time' },
+      { type: 'text', content: '  neofetch           - System info display' },
       { type: 'text', content: '' },
       { type: 'text', content: 'System Commands:' },
       { type: 'text', content: '─'.repeat(16) },
       { type: 'text', content: '  help               - Show this help' },
+      { type: 'text', content: '  man <cmd>          - Detailed command manual' },
       { type: 'text', content: '  clear              - Clear terminal' },
+      { type: 'text', content: '  history            - Command history' },
+      { type: 'text', content: '  theme              - Change color theme' },
+      { type: 'text', content: '  crt                - Toggle CRT effect' },
+      { type: 'text', content: '  reboot             - Replay boot sequence' },
       { type: 'text', content: '' },
       { type: 'text', content: 'Navigation:' },
       { type: 'text', content: '  ↑/↓ arrows        - Command history' },
       { type: 'text', content: '  Tab                - Auto-complete' },
       { type: 'text', content: '  Ctrl+L             - Clear screen' },
+      { type: 'text', content: '  Click output       - Copy to clipboard' },
       { type: 'text', content: '' },
-      { type: 'success', content: 'Mix of professional insights and fun interactions!' },
+      { type: 'success', content: 'Type any command to get started!' },
       { type: 'text', content: '' },
     ];
   }
@@ -886,9 +909,328 @@ export default class CommandProcessor {
       { type: 'text', content: '' },
       { type: 'text', content: 'Try these commands:' },
       { type: 'text', content: 'Professional: whoami, about, skills, projects, contact' },
-      { type: 'text', content: 'Fun: fun, dino, joke, coffee, matrix' },
+      { type: 'text', content: 'Fun: fun, dino, joke, coffee, matrix, neofetch' },
+      { type: 'text', content: 'System: theme, crt, history, reboot' },
       { type: 'text', content: '' },
       { type: 'text', content: `Type 'help' for the complete list!` },
+      { type: 'text', content: '' },
+    ];
+  }
+
+  // ===== NEOFETCH =====
+  neofetch() {
+    const w = typeof window !== 'undefined' ? window.innerWidth : 1920;
+    const h = typeof window !== 'undefined' ? window.innerHeight : 1080;
+    const uptime = this._getUptime();
+
+    const logo = [
+      '       ██████╗  ██████╗ ',
+      '       ██╔══██╗██╔══██╗',
+      '       ██████╔╝██████╔╝',
+      '       ██╔══██╗██╔══██║',
+      '       ██║  ██║██║  ██║',
+      '       ╚═╝  ╚═╝╚═╝  ╚═╝',
+    ];
+
+    const info = [
+      `rajageethan@portfolio`,
+      `─────────────────────`,
+      `OS: Terminal Portfolio v1.0`,
+      `Host: rajageethan.dev`,
+      `Kernel: React 19.1.1`,
+      `Shell: Portfolio CLI v1.0`,
+      `Uptime: ${uptime}`,
+      `Packages: 195 (npm)`,
+      `Resolution: ${w}x${h}`,
+      `Terminal: Custom React Terminal`,
+      `CPU: JavaScript ES2024`,
+      `GPU: CSS Animations Engine`,
+    ];
+
+    const combined = logo.map((line, i) => {
+      const infoLine = info[i] || '';
+      const paddedLogo = line.padEnd(28);
+      return paddedLogo + infoLine;
+    });
+
+    // Handle extra info lines beyond logo
+    for (let i = logo.length; i < info.length; i++) {
+      combined.push(' '.repeat(28) + info[i]);
+    }
+
+    return [
+      { type: 'ascii', content: combined.join('\n') },
+      { type: 'text', content: '' },
+    ];
+  }
+
+  _getUptime() {
+    const start = new Date('2024-04-01');
+    const now = new Date();
+    const diff = now - start;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const months = Math.floor(days / 30);
+    if (months > 12) {
+      const years = Math.floor(months / 12);
+      const rem = months % 12;
+      return `${years} year${years > 1 ? 's' : ''}, ${rem} month${rem !== 1 ? 's' : ''}`;
+    }
+    return `${months} months, ${days % 30} days`;
+  }
+
+  // ===== SOCIAL =====
+  social() {
+    return [
+      { type: 'text', content: 'SOCIAL LINKS' },
+      { type: 'text', content: '═'.repeat(12) },
+      { type: 'text', content: '' },
+      { type: 'text', content: '  📧  Email' },
+      { type: 'link', content: '      rajageethan18@gmail.com', url: 'mailto:rajageethan18@gmail.com' },
+      { type: 'text', content: '' },
+      { type: 'text', content: '  💻  GitHub' },
+      { type: 'link', content: '      github.com/rajageethan', url: 'https://github.com/rajageethan' },
+      { type: 'text', content: '' },
+      { type: 'text', content: '  🔗  LinkedIn' },
+      { type: 'link', content: '      linkedin.com/in/rajageethan-a', url: 'https://linkedin.com/in/rajageethan-a' },
+      { type: 'text', content: '' },
+      { type: 'text', content: '  🌐  Portfolio' },
+      { type: 'link', content: '      rajageethan.dev', url: 'https://rajageethan.dev' },
+      { type: 'text', content: '' },
+      { type: 'text', content: '  📱  Phone' },
+      { type: 'text', content: '      +91 95666 32717' },
+      { type: 'text', content: '' },
+      { type: 'success', content: 'Available for opportunities — reach out anytime!' },
+      { type: 'text', content: '' },
+    ];
+  }
+
+  // ===== PROJECT DETAIL =====
+  projectDetail(args) {
+    if (!args.length) {
+      return [
+        { type: 'text', content: 'PROJECT DEEP DIVE' },
+        { type: 'text', content: '═'.repeat(17) },
+        { type: 'text', content: '' },
+        { type: 'text', content: 'Usage: project <name>' },
+        { type: 'text', content: '' },
+        { type: 'text', content: 'Available projects:' },
+        { type: 'text', content: '  project legal      - AI Legal Assistant' },
+        { type: 'text', content: '  project wheels     - ShareWheels' },
+        { type: 'text', content: '  project blood      - Blood Donor App' },
+        { type: 'text', content: '  project telegraph  - Telegraph Simulator' },
+        { type: 'text', content: '  project kural      - Thirukkural Daily' },
+        { type: 'text', content: '  project terminal   - This Portfolio' },
+        { type: 'text', content: '' },
+      ];
+    }
+
+    const key = args.join(' ').toLowerCase();
+    const projectDetails = {
+      'legal': {
+        name: 'AI Legal Assistant',
+        role: 'AI/ML Developer',
+        duration: '2024',
+        stack: 'FastAPI · LangChain · ChromaDB · Firebase · React',
+        problem: 'Legal professionals spend hours searching through documents manually. There was a need for an intelligent system that could understand legal context and retrieve relevant information quickly.',
+        solution: 'Built an AI-powered assistant using RAG (Retrieval Augmented Generation) pipelines that processes legal documents, creates vector embeddings, and provides contextually accurate responses to legal queries.',
+        features: [
+          'RAG pipeline with LangChain for intelligent document retrieval',
+          'ChromaDB vector database for semantic search',
+          'NLP models for legal text processing and understanding',
+          'Firebase authentication and session management',
+          'React frontend with real-time chat interface',
+          'Context-aware search across multiple legal documents'
+        ],
+        impact: 'Reduced legal document search time significantly with AI-powered contextual retrieval',
+        github: 'https://github.com/rajageethan/ai-legal-assistant'
+      },
+      'wheels': {
+        name: 'ShareWheels',
+        role: 'Mobile App Developer',
+        duration: '2023-2024',
+        stack: 'React Native · Expo · Firebase · Geolocation',
+        problem: 'Existing carpooling apps separated city and long-distance rides, forcing users to install multiple apps. No unified solution existed for the Indian commuter.',
+        solution: 'Created a unified carpooling platform that handles both city commutes and long-distance rides in a single app with real-time ride matching.',
+        features: [
+          'Unified ride listings for city and intercity travel',
+          'Real-time ride matching with proximity algorithms',
+          'Driver verification and trust rating system',
+          'Secure trip management with live tracking',
+          'Push notifications for ride updates',
+          'Cross-platform mobile app (iOS + Android)'
+        ],
+        impact: 'Unified two separate use-cases into one seamless user experience',
+        github: 'https://github.com/rajageethan/sharewheels'
+      },
+      'blood': {
+        name: 'Blood Donor Application',
+        role: 'Full-Stack Mobile Developer',
+        duration: '2023-2024',
+        stack: 'React Native · Expo · Firebase · Geolocation',
+        problem: 'During emergencies, finding compatible blood donors nearby is time-critical. Traditional methods (phone calls, social media) are too slow.',
+        solution: 'Built a real-time platform that instantly connects blood seekers with nearby compatible donors using geolocation and push notifications.',
+        features: [
+          'Proximity-based donor-seeker matching',
+          'Real-time emergency notifications',
+          'Blood type compatibility filtering',
+          'Geolocation-based nearest donor search',
+          'Donor profile and availability management',
+          'Emergency SOS broadcast to nearby donors'
+        ],
+        impact: 'Potential to save lives by reducing blood donor discovery time from hours to minutes',
+        github: 'https://github.com/rajageethan/blood-donor-app'
+      },
+      'telegraph': {
+        name: 'Telegraph Machine Simulator',
+        role: 'Mobile Developer',
+        duration: '2023',
+        stack: 'React Native · Expo · Audio APIs',
+        problem: 'Wanted to create an immersive, educational tool exploring historical Morse code communication with authentic interaction.',
+        solution: 'Built a war-film-inspired Morse code simulator with realistic telegraph sounds and touch-based input.',
+        features: [
+          'Touch-based Morse code input (tap for dot, hold for dash)',
+          'Authentic telegraph sound effects',
+          'Real-time Morse to text translation',
+          'War-film-inspired visual design',
+          'Haptic feedback for immersive experience',
+          'Educational mode with Morse code reference'
+        ],
+        impact: 'Unique creative project showcasing audio integration and immersive UX design',
+        github: 'https://github.com/rajageethan/telegraph-simulator'
+      },
+      'kural': {
+        name: 'Thirukkural Daily App',
+        role: 'Full-Stack Developer',
+        duration: '2023',
+        stack: 'Flask · Firebase · HTML · CSS · JavaScript',
+        problem: 'Tamil literary heritage is underrepresented in modern digital platforms. Wanted to make Thirukkural (ancient Tamil literature) accessible daily.',
+        solution: 'Built a minimal web app that delivers one Thirukkural per day with explanations in a clean, modern interface.',
+        features: [
+          'Daily rotating Thirukkural with explanations',
+          'Clean, minimalist reading interface',
+          'Firebase backend for content management',
+          'Flask server with efficient caching',
+          'Responsive design for all devices',
+          'Cultural promotion through technology'
+        ],
+        impact: 'Promoting Tamil literary heritage through modern web technology',
+        github: 'https://github.com/rajageethan/thirukkural-daily'
+      },
+      'terminal': {
+        name: 'Interactive Terminal Portfolio',
+        role: 'Frontend Developer',
+        duration: '2024 - Present',
+        stack: 'React · Vite · CSS · GitHub Pages',
+        problem: 'Standard portfolio websites are forgettable. Needed something that demonstrates creativity and technical skill simultaneously.',
+        solution: 'Built a fully functional terminal emulator as a portfolio site with 25+ commands, games, themes, and mobile responsiveness.',
+        features: [
+          'Full terminal emulation with command processing',
+          'Tab autocomplete and command history',
+          '6 color themes (Matrix, Dracula, Monokai, etc.)',
+          'Embedded games (Dino Runner, Matrix Rain)',
+          'CRT scanline retro effect',
+          'Boot sequence animation',
+          'Mobile responsive with touch support',
+          'PWA installable on mobile devices'
+        ],
+        impact: 'A unique, memorable portfolio that showcases both creativity and engineering skill',
+        github: 'https://github.com/rajageethan/terminal-portfolio'
+      }
+    };
+
+    const detail = projectDetails[key];
+    if (!detail) {
+      return [
+        { type: 'error', content: `Project '${key}' not found` },
+        { type: 'text', content: '' },
+        { type: 'text', content: 'Available: legal, wheels, blood, telegraph, kural, terminal' },
+        { type: 'text', content: 'Usage: project <name>' },
+        { type: 'text', content: '' },
+      ];
+    }
+
+    return [
+      { type: 'text', content: `${detail.name.toUpperCase()}` },
+      { type: 'text', content: '═'.repeat(detail.name.length) },
+      { type: 'text', content: '' },
+      { type: 'text', content: `Role:     ${detail.role}` },
+      { type: 'text', content: `Duration: ${detail.duration}` },
+      { type: 'text', content: `Stack:    ${detail.stack}` },
+      { type: 'text', content: '' },
+      { type: 'text', content: 'THE PROBLEM:' },
+      { type: 'text', content: `  ${detail.problem}` },
+      { type: 'text', content: '' },
+      { type: 'text', content: 'THE SOLUTION:' },
+      { type: 'text', content: `  ${detail.solution}` },
+      { type: 'text', content: '' },
+      { type: 'text', content: 'KEY FEATURES:' },
+      ...detail.features.map(f => ({ type: 'text', content: `  • ${f}` })),
+      { type: 'text', content: '' },
+      { type: 'success', content: `Impact: ${detail.impact}` },
+      { type: 'text', content: '' },
+      { type: 'link', content: `View on GitHub →`, url: detail.github },
+      { type: 'text', content: '' },
+    ];
+  }
+
+  // ===== MAN PAGES =====
+  manPage(args) {
+    if (!args.length) {
+      return [
+        { type: 'text', content: 'MANUAL PAGES' },
+        { type: 'text', content: '═'.repeat(12) },
+        { type: 'text', content: '' },
+        { type: 'text', content: 'Usage: man <command>' },
+        { type: 'text', content: 'Example: man skills' },
+        { type: 'text', content: '' },
+        { type: 'text', content: 'Shows detailed usage information for any command.' },
+        { type: 'text', content: '' },
+      ];
+    }
+
+    const cmd = args[0].toLowerCase();
+    const manPages = {
+      'help': { syn: 'help', desc: 'Display a list of all available commands with brief descriptions.', usage: 'help', notes: 'This is a good starting point for new visitors.' },
+      'whoami': { syn: 'whoami', desc: 'Display personal introduction including name, role, location, and philosophy.', usage: 'whoami', notes: 'Inspired by the Unix whoami command.' },
+      'about': { syn: 'about', desc: 'Show detailed professional summary including core competencies and interests.', usage: 'about', notes: 'A comprehensive overview of professional capabilities.' },
+      'skills': { syn: 'skills', desc: 'Display technical competencies across programming, frontend, backend, mobile, AI/ML, database, and tools categories with visual progress bars.', usage: 'skills', notes: 'Progress bars indicate relative proficiency levels.' },
+      'projects': { syn: 'projects', desc: 'Show portfolio of all completed projects in a table format with featured project details.', usage: 'projects\nproject <name>', notes: 'Use "project <name>" for detailed case study. Available: legal, wheels, blood, telegraph, kural, terminal' },
+      'contact': { syn: 'contact', desc: 'Display all contact information including email, phone, LinkedIn, GitHub, and portfolio links.', usage: 'contact\nsocial', notes: 'Also try the "social" command for a quick links view.' },
+      'theme': { syn: 'theme [name]', desc: 'View available themes or switch to a specific theme. Themes persist across sessions via localStorage.', usage: 'theme\ntheme dracula\ntheme matrix', notes: 'Available: matrix, dracula, monokai, solarized, amber, cyberpunk' },
+      'crt': { syn: 'crt', desc: 'Toggle the CRT scanline overlay effect for a retro terminal look.', usage: 'crt', notes: 'This applies a visual overlay with scanlines and subtle flicker.' },
+      'neofetch': { syn: 'neofetch', desc: 'Display system information in the style of the popular Linux neofetch command.', usage: 'neofetch', notes: 'Shows portfolio "system" details like React version, uptime, resolution, etc.' },
+      'dino': { syn: 'dino', desc: 'Launch the Chrome Dino Runner game. Jump over cacti to score points.', usage: 'dino', notes: 'Controls: Space/↑ to jump. Click/tap on mobile. Speed increases every 100 points.' },
+      'matrix': { syn: 'matrix', desc: 'Display the iconic Matrix digital rain effect.', usage: 'matrix', notes: 'Renders animated falling characters in a canvas element.' },
+      'clear': { syn: 'clear', desc: 'Clear all terminal output. Also available via Ctrl+L.', usage: 'clear', notes: 'Shortcut: Ctrl+L' },
+      'history': { syn: 'history', desc: 'Show the last 20 commands you have entered. History persists across sessions.', usage: 'history', notes: 'Navigate history with ↑/↓ arrow keys.' },
+      'reboot': { syn: 'reboot', desc: 'Replay the boot sequence animation and reload the terminal.', usage: 'reboot', notes: 'The boot sequence normally only plays on first visit per session.' },
+    };
+
+    const page = manPages[cmd];
+    if (!page) {
+      return [
+        { type: 'error', content: `No manual entry for '${cmd}'` },
+        { type: 'text', content: '' },
+        { type: 'text', content: 'Try: man help, man skills, man theme, man dino' },
+        { type: 'text', content: '' },
+      ];
+    }
+
+    return [
+      { type: 'text', content: `MAN: ${cmd.toUpperCase()}` },
+      { type: 'text', content: '═'.repeat(5 + cmd.length) },
+      { type: 'text', content: '' },
+      { type: 'text', content: 'NAME' },
+      { type: 'text', content: `    ${page.syn}` },
+      { type: 'text', content: '' },
+      { type: 'text', content: 'DESCRIPTION' },
+      { type: 'text', content: `    ${page.desc}` },
+      { type: 'text', content: '' },
+      { type: 'text', content: 'USAGE' },
+      ...page.usage.split('\n').map(u => ({ type: 'text', content: `    $ ${u}` })),
+      { type: 'text', content: '' },
+      { type: 'text', content: 'NOTES' },
+      { type: 'text', content: `    ${page.notes}` },
       { type: 'text', content: '' },
     ];
   }
